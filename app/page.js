@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
@@ -40,13 +40,20 @@ export default function Home() {
 	return (
 		<div className="min-h-screen flex flex-col justify-center items-center bg-[#021225] p-6">
 			<h1 className="text-4xl font-bold text-gray-100 mb-8">
-				Domain Records
+				Domain Records for -{' '}
+				<a
+					className="text-[#FF204E] hover:underline hover:text-gray-50"
+					href="https://agamya.dev"
+					target="_blank"
+				>
+					agamya.dev
+				</a>
 			</h1>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 				{data.map((record) => (
 					<Link
-            href={`https://${record.name}`}
-            target='_blank'
+						href={`https://${record.name}`}
+						target="_blank"
 						key={record.id}
 						className="bg-[#2a0fc4] rounded-lg shadow-lg p-6 text-center transform transition-transform hover:scale-105"
 					>
