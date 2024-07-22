@@ -10,30 +10,30 @@ export async function GET(request) {
 		},
 	};
 
-	const response = await fetch(process.env.CLOUDFLARE_API, options)
-		.then((response) => response.json())
-		.catch((err) => console.error(err));
+	try {
+		const response = await fetch(process.env.CLOUDFLARE_API, options);
+		const jsonResponse = await response.json();
 
-	const data = [];
-	response.result.map((record) => {
-		const json_data = {
+		const data = jsonResponse.result.map((record) => ({
 			name: record.name,
 			// type: record.type,
 			// content: record.content,
 			// ttl: record.ttl,
-		};
-		data.push(json_data);
-	});
-	// console.log(data);
+		}));
 
-	return NextResponse.json(data);
+		const res = NextResponse.json(data);
+		res.headers.set(
+			'Cache-Control',
+			'no-store, no-cache, must-revalidate, proxy-revalidate'
+		);
+		res.headers.set('Pragma', 'no-cache');
+		res.headers.set('Expires', '0');
+		return res;
+	} catch (err) {
+		console.error(err);
+		return NextResponse.json(
+			{ error: 'Failed to fetch data' },
+			{ status: 500 }
+		);
+	}
 }
-
-// export async function GET(request) {
-// 	const greeting = 'Hello World!!';
-// 	const json = {
-// 		greeting,
-// 	};
-
-// 	return NextResponse.json(json);
-// }
